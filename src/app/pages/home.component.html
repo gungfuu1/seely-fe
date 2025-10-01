@@ -1,16 +1,28 @@
 <section>
-  <h2>Menu Series</h2>
+  <h2>All Series</h2>
   <div class="grid">
-    <div class="card" *ngFor="let item of itemSeries">
-      <img [src]="item.imageUrl" [alt]="item.name" />
-      <div class="card-body">
-        <h3>{{ item.name }} ({{ item.year }})</h3>
-        <p>{{ item.description }}</p>
-        <p><strong>เรท:</strong> {{ item.rating.name }}</p>
-        <p><strong>Owner Score:</strong> {{ item.ownerScore.name }}</p>
-        <p><strong>โดย:</strong> {{ item.user.username }}</p>
-        <p><strong>Avg:</strong> {{ item.avg_rating }} ⭐ ({{ item.rating_count }} โหวต)</p>
-      </div>
+    <div *ngFor="let item of series" class="card">
+        
+      <a [routerLink]="['/item-series', item.id]">
+        <img [src]="item.imageUrl" alt="{{ item.name }}">
+      </a>
+      <h3><a [routerLink]="['/item-series', item.id]">{{ item.name }}</a></h3>
+      <p><strong>Year:</strong> {{ item.year }}</p>
+      <p><strong>Description:</strong> {{ item.description }}</p>
+
+      <p><strong>Rating:</strong> {{ item.rating?.name }} </p>
+      <p><strong>Owner Score:</strong> {{ item.ownerScore?.name }}</p>
+
+      <p><strong>Posted by:</strong> {{ item.user?.username }}</p>
+
+      <p><strong>Average Rating 🌟:</strong> {{ item.avg_rating }} / 5 <p>
+      <p><strong>Votes:</strong> {{ item.rating_count }}</p>
     </div>
+  </div>
+
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Prev</button>
+    <span>Page {{ currentPage }} / {{ meta?.totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === meta?.totalPages">Next</button>
   </div>
 </section>

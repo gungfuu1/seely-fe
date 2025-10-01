@@ -5,7 +5,15 @@
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
       <a routerLink="/about" routerLinkActive="active">About</a>
       <a routerLink="/contact" routerLinkActive="active">Contact</a>
-      <a routerLink="/lab" routerLinkActive="active">Lab</a>
+
+      <!-- ปุ่ม login/logout -->
+      <ng-container *ngIf="!user; else loggedIn">
+        <a [href]="loginUrl">Login</a>
+      </ng-container>
+      <ng-template #loggedIn>
+        <span class="username">👤 {{ user?.username }}</span>
+        <button *ngIf="user" routerLink="/item-series/create" class="btn-create">+ Create Series</button>
+      </ng-template>
     </nav>
   </div>
 </header>

@@ -8,19 +8,20 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section *ngIf="series">
+    <section class="series-detail" *ngIf="series">
       <h2>{{ series.name }} ({{ series.year }})</h2>
-      <img [src]="series.imageUrl" alt="{{ series.name }}" style="max-width:300px;display:block;margin-bottom:16px;">
+      <img [src]="series.imageUrl" alt="{{ series.name }}" style="max-width:500px;display:block;margin-bottom:16px;">
       <p><b>Description:</b> {{ series.description }}</p>
-      <p><b>Rating:</b> {{ series.rating?.name }}</p>
+      <p><b>Rating: </b>{{ series.rating?.name }}  {{ series.rating?.description }}</p>
       <p><b>Owner Score:</b> {{ series.ownerScore?.name }}</p>
-      <p><b>Average Rating:</b> {{ series.avg_rating }} (from {{ series.rating_count }} votes)</p>
-      <p><b>Added by:</b> {{ series.user?.username }}</p>
+      <p><b>Average Rating 🌟:</b> {{ series.avg_rating }} (from {{ series.rating_count }} votes)</p>
+      <p><b>Created by:</b> {{ series.user?.username }}</p>
     </section>
     <section *ngIf="!series">
       <p>Loading series detail...</p>
     </section>
-  `
+  `,
+   styleUrls: ['./series-detail.component.css']
 })
 export class SeriesDetailComponent implements OnInit {
   series: any;

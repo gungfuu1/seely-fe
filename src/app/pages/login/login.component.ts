@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LabService } from '../../services/lab.service';
+import { LabService } from '../../services/login.service';
 
 @Component({
   selector: 'page-lab',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './lab.component.html',
-  styleUrls: ['./lab.component.css']
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
-export class LabComponent implements OnInit {
+export class LoginComponent implements OnInit {
   itemSeries: any[] = [];
   loading = true;
   error: string | null = null;

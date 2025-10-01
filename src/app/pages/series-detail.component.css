@@ -1,0 +1,16 @@
+.series-detail {
+  width: 100%;                
+  display: flex;              
+  flex-direction: column;    
+  align-items: center;        
+  justify-content: flex-start;
+  margin: 20px 0;             
+  text-align: center;         
+}
+
+.series-detail img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  display: block;
+}

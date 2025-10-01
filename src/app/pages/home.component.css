@@ -1,34 +1,53 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
 }
 
 .card {
   border: 1px solid #ddd;
   border-radius: 8px;
-  overflow: hidden;
+  padding: 16px;
   background: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
 }
 
 .card img {
   width: 100%;
-  height: 180px;
-  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 12px;
 }
 
-.card-body {
-  padding: 12px;
+.card h3 {
+  margin: 8px 0;
+  font-size: 1.2rem;
+  color: #0d6efd;
 }
 
-.card-body h3 {
-  margin: 0 0 8px;
-  font-size: 1.1rem;
-}
-
-.card-body p {
+.card p {
   margin: 4px 0;
-  font-size: 0.9rem;
   color: #444;
+  font-size: 0.9rem;
 }
+
+.card img {
+  max-width: 100%;
+  border-radius: 4px;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+

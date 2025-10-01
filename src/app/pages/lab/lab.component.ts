@@ -1,19 +1,32 @@
-import {  Component } from '@angular/core';
-import { LabService } from '../../services/lab.service';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LabService } from '../../services/lab.service';
+
 @Component({
-  selector: 'app-lab',
+  selector: 'page-lab',
+  standalone: true,
   imports: [CommonModule],
-  template: `<p>{{ labName }}</p>`,
-  styleUrl: './lab.component.css',
+  templateUrl: './lab.component.html',
+  styleUrls: ['./lab.component.css']
 })
-export class LabComponent {
+export class LabComponent implements OnInit {
+  itemSeries: any[] = [];
+  loading = true;
+  error: string | null = null;
+
   constructor(private labService: LabService) {}
-  labName = '';
-  ngOnInit() {
-    this.labService.getLabData().then((data) => {
-      console.log(data);
-      this.labName = data.name;
+
+  ngOnInit(): void {
+    this.labService.getItemSeries().subscribe({
+      next: (res) => {
+        this.itemSeries = res.data; // ใช้ data จาก response ของ BE
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = 'โหลดข้อมูลไม่สำเร็จ 😢';
+        console.error(err);
+        this.loading = false;
+      }
     });
   }
 }

@@ -1,0 +1,16 @@
+<section>
+  <h2>Menu Series</h2>
+  <div class="grid">
+    <div class="card" *ngFor="let item of itemSeries">
+      <img [src]="item.imageUrl" [alt]="item.name" />
+      <div class="card-body">
+        <h3>{{ item.name }} ({{ item.year }})</h3>
+        <p>{{ item.description }}</p>
+        <p><strong>เรท:</strong> {{ item.rating.name }}</p>
+        <p><strong>Owner Score:</strong> {{ item.ownerScore.name }}</p>
+        <p><strong>โดย:</strong> {{ item.user.username }}</p>
+        <p><strong>Avg:</strong> {{ item.avg_rating }} ⭐ ({{ item.rating_count }} โหวต)</p>
+      </div>
+    </div>
+  </div>
+</section>

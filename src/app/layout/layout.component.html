@@ -6,13 +6,17 @@
       <a routerLink="/about" routerLinkActive="active">About</a>
       <a routerLink="/contact" routerLinkActive="active">Contact</a>
 
-      <!-- ปุ่ม login/logout -->
+      <!-- ถ้ายังไม่ login -->
       <ng-container *ngIf="!user; else loggedIn">
-        <a [href]="loginUrl">Login</a>
+        <a href="javascript:void(0)" (click)="login()" class="login-link">Login</a>
       </ng-container>
       <ng-template #loggedIn>
-        <span class="username">👤 {{ user?.username }}</span>
-        <button *ngIf="user" routerLink="/item-series/create" class="btn-create">+ Create Series</button>
+        <a routerLink="/item-series/create" >Create Series</a>
+        <span class="username" (click)="logout()" style="cursor: pointer;">
+          👤 {{ user?.firstName || user?.username }}
+        </span>
+        <a href="javascript:void(0)" (click)="logout()" class="logout-link">Logout</a>
+        
       </ng-template>
     </nav>
   </div>

@@ -37,9 +37,9 @@
 .btn-create {
   margin-left: 12px;
   padding: 6px 12px;
-  background: #ffc107;
-  border-radius: 4px;
-  color: #000;
+  background: #4b85f1;
+  /* border-radius: 1px; */
+  color: #fdfdfd;
   font-weight: 600;
 }
 .site-main {

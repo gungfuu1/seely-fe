@@ -46,33 +46,24 @@ export class LayoutComponent implements OnInit {
 
   // ฟังก์ชัน login
   login() {
-    // เคลียร์ localStorage ก่อนทุกครั้ง → บังคับให้ไป Keycloak
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('user');
+  // เคลียร์ข้อมูล FE ทุกครั้งก่อน redirect
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('user');
 
-    window.location.href = 'http://localhost:3000/api/v1/auth/login/keycloak';
-  }
+  // ไปที่ BE เพื่อ redirect Keycloak (พร้อม prompt=login)
+  window.location.href = 'http://localhost:3000/api/v1/auth/login/keycloak';
+}
 
   // ฟังก์ชัน logout
-  logout() {
-    fetch('http://localhost:3000/api/v1/auth/logout', {
-      method: 'POST',
-      credentials: 'include',
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        // เคลียร์ token ใน FE
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('user');
-        this.user = null;
+ logout() {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('user');
+  this.user = null;
+  // 👉 นำทางไปที่ backend GET /auth/logout
+  window.location.href = 'http://localhost:3000/api/v1/auth/logout';
+}
 
-        // redirect กลับหน้า Home
-        window.location.href = data.logoutUrl || 'http://localhost:4200/';
-      })
-      .catch((err) => {
-        console.error('Logout failed:', err);
-        // fallback redirect
-        window.location.href = 'http://localhost:4200/';
-      });
-  }
+
+
+
 }

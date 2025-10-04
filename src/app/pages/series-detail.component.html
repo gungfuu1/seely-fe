@@ -1,0 +1,33 @@
+<section *ngIf="series">
+  <h2>{{ series.name }}</h2>
+
+  <img [src]="series.imageUrl" alt="{{ series.name }}" width="300" />
+
+  <p><strong>คำอธิบาย:</strong> {{ series.description }}</p>
+  <p><strong>ปี:</strong> {{ series.year }}</p>
+  <p><strong>ประเภท:</strong> {{ series.rating?.name }}</p>
+  <p><strong>เจ้าของคะแนน:</strong> {{ series.ownerScore?.name }}</p>
+  <p><strong>โดย:</strong> {{ series.user?.username }}</p>
+
+  <div class="vote-section" *ngIf="username">
+    <h3>ให้คะแนน</h3>
+
+    <select [(ngModel)]="score">
+      <option value="0">เลือกคะแนน</option>
+      <option *ngFor="let s of [1,2,3,4,5]" [value]="s">{{ s }} ⭐</option>
+    </select>
+
+    <button (click)="submitVote()" [disabled]="isSubmitting">
+      {{ isSubmitting ? 'กำลังส่ง...' : 'โหวต' }}
+    </button>
+  </div>
+
+  <div class="stats">
+    <p><strong>คะแนนเฉลี่ย 🌟:</strong> {{ series.avg_rating || 0 | number:'1.1-1' }}</p>
+    <p><strong>จำนวนโหวต:</strong> {{ series.rating_count || 0 }}</p>
+  </div>
+
+  <div *ngIf="!username" class="login-warning">
+    ⚠️ กรุณาเข้าสู่ระบบเพื่อให้คะแนน
+  </div>
+</section>

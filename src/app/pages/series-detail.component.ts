@@ -1,30 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'page-series-detail',
+  selector: 'app-series-detail',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <section class="series-detail" *ngIf="series">
-      <h2>{{ series.name }} ({{ series.year }})</h2>
-      <img [src]="series.imageUrl" alt="{{ series.name }}" style="max-width:500px;display:block;margin-bottom:16px;">
-      <p><b>Description:</b> {{ series.description }}</p>
-      <p><b>Rating: </b>{{ series.rating?.name }}  {{ series.rating?.description }}</p>
-      <p><b>Owner Score:</b> {{ series.ownerScore?.name }}</p>
-      <p><b>Average Rating 🌟:</b> {{ series.avg_rating }} (from {{ series.rating_count }} votes)</p>
-      <p><b>Created by:</b> {{ series.user?.username }}</p>
-    </section>
-    <section *ngIf="!series">
-      <p>Loading series detail...</p>
-    </section>
-  `,
-   styleUrls: ['./series-detail.component.css']
+  imports: [CommonModule, FormsModule],
+  templateUrl: './series-detail.component.html',
 })
-export class SeriesDetailComponent implements OnInit {
-  series: any;
+export class SeriesDetailComponent {
+  series: any = null;
+  id!: number;
+  username: string | null = null;
+  score = 0;
+  hasVoted = false;
+  isSubmitting = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,10 +24,50 @@ export class SeriesDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.http.get(`http://localhost:3000/api/v1/item-series/${id}`)
-        .subscribe(data => this.series = data);
+    this.id = Number(this.route.snapshot.paramMap.get('id'));
+    this.username = localStorage.getItem('username'); // ✅ ดึงจาก localStorage
+
+    this.loadSeries();
+  }
+
+  loadSeries() {
+    this.http
+      .get(`http://localhost:3000/api/v1/item-series/${this.id}`)
+      .subscribe((res: any) => {
+        this.series = res;
+      });
+  }
+
+  submitVote() {
+    if (!this.username) {
+      alert('กรุณาเข้าสู่ระบบก่อนโหวต');
+      return;
     }
+
+    if (this.score < 1 || this.score > 5) {
+      alert('กรุณาเลือกคะแนน 1-5');
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    this.http
+      .post(`http://localhost:3000/api/v1/item-series/${this.id}/rate`, {
+        score: this.score,
+        username: this.username,
+      })
+      .subscribe({
+        next: (res: any) => {
+          alert('ขอบคุณสำหรับการโหวต!');
+          this.hasVoted = true;
+          this.isSubmitting = false;
+          this.loadSeries(); // โหลดใหม่เพื่ออัปเดต avg
+        },
+        error: (err) => {
+          console.error(err);
+          alert('เกิดข้อผิดพลาดในการโหวต');
+          this.isSubmitting = false;
+        },
+      });
   }
 }

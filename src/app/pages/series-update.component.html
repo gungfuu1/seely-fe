@@ -1,0 +1,15 @@
+<div class="update-form">
+  <h2>Update Series</h2>
+  <form (ngSubmit)="onSave()">
+    <label>Name</label>
+    <input [(ngModel)]="series.name" name="name" />
+
+    <label>Description</label>
+    <textarea [(ngModel)]="series.description" name="description"></textarea>
+
+    <label>Year</label>
+    <input type="number" [(ngModel)]="series.year" name="year" />
+
+    <button type="submit">Save</button>
+  </form>
+</div>

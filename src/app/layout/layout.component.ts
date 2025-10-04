@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-layout',
@@ -10,60 +11,48 @@ import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/rou
   styleUrls: ['./layout.component.css'],
 })
 export class LayoutComponent implements OnInit {
-  user: { username?: string; firstName?: string } | null = null;
+  user: any = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
-    const firstName = urlParams.get('firstName');
-    const username = urlParams.get('user');
 
     if (token) {
-      // ✅ เก็บ token และ user ลง localStorage
-      localStorage.setItem('accessToken', token);
-      localStorage.setItem(
-        'user',
-        JSON.stringify({
-          username: username || '',
-          firstName: firstName || username || '',
-        }),
-      );
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const userData = {
+          username: payload.preferred_username || payload.username || '',
+          firstName: payload.given_name || payload.firstName || '',
+          lastName: payload.family_name || payload.lastName || '',
+          email: payload.email || '',
+          role: payload.role || (payload.realm_access?.roles?.[0] || '')
+        };
 
-      // clear query string ออกจาก URL
-      this.router.navigate([], { queryParams: {} });
+        // ✅ เซฟผ่าน AuthService
+        this.authService.setLogin(userData, token);
 
-      this.user = { username: username || '', firstName: firstName || username || '' };
-    } else {
-      // ✅ ถ้ามี user เก็บไว้แล้ว
-      const savedUser = localStorage.getItem('user');
-      if (savedUser) {
-        this.user = JSON.parse(savedUser);
+        // clear query string ออกจาก URL
+        this.router.navigate([], { queryParams: {} });
+
+        this.user = userData;
+      } catch (e) {
+        console.error('[Layout] decode token error', e);
       }
+    } else {
+      this.user = this.authService.getCurrentUser();
     }
   }
 
-  // ฟังก์ชัน login
   login() {
-  // เคลียร์ข้อมูล FE ทุกครั้งก่อน redirect
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('user');
+    this.authService.logout();
+    window.location.href = 'http://localhost:3000/api/v1/auth/login/keycloak';
+  }
 
-  // ไปที่ BE เพื่อ redirect Keycloak (พร้อม prompt=login)
-  window.location.href = 'http://localhost:3000/api/v1/auth/login/keycloak';
-}
-
-  // ฟังก์ชัน logout
- logout() {
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('user');
-  this.user = null;
-  // 👉 นำทางไปที่ backend GET /auth/logout
-  window.location.href = 'http://localhost:3000/api/v1/auth/logout';
-}
-
-
-
-
+  logout() {
+    this.authService.logout();
+    this.user = null;
+    window.location.href = 'http://localhost:3000/api/v1/auth/logout';
+  }
 }

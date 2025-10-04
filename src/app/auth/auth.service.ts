@@ -16,7 +16,6 @@ export class AuthService {
   private token: string | null = null;
 
   constructor() {
-    // โหลดจาก localStorage ตอนเริ่ม
     const savedUser = localStorage.getItem('user');
     const savedToken = localStorage.getItem('accessToken');
     if (savedUser && savedToken) {
@@ -25,13 +24,12 @@ export class AuthService {
     }
   }
 
-  // ✅ ใช้ตอน login (manual หรือ keycloak)
   setLogin(user: User, token: string) {
     this.user = user;
     this.token = token;
     localStorage.setItem('user', JSON.stringify(user));
     localStorage.setItem('accessToken', token);
-    console.log('[AuthService] setLogin:', user);
+    console.log('[AuthService]  Logged in:', user);
   }
 
   getCurrentUser(): User | null {
@@ -47,6 +45,6 @@ export class AuthService {
     localStorage.removeItem('accessToken');
     this.user = null;
     this.token = null;
-    console.log('[AuthService] logged out');
+    console.log('[AuthService] 🚪 Logged out');
   }
 }

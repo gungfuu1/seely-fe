@@ -1,33 +1,38 @@
-<section *ngIf="series">
+<div *ngIf="series; else loading" class="detail-container">
   <h2>{{ series.name }}</h2>
-
-  <img [src]="series.imageUrl" alt="{{ series.name }}" width="300" />
-
+  <img [src]="series.imageUrl" alt="{{ series.name }}" class="cover" />
   <p><strong>คำอธิบาย:</strong> {{ series.description }}</p>
   <p><strong>ปี:</strong> {{ series.year }}</p>
-  <p><strong>ประเภท:</strong> {{ series.rating?.name }}</p>
-  <p><strong>เจ้าของคะแนน:</strong> {{ series.ownerScore?.name }}</p>
   <p><strong>โดย:</strong> {{ series.user?.username }}</p>
+  <p><strong>เรตติ้ง:</strong> {{ series.rating?.name }} | {{ series.rating?.description }}</p>
+  <p><strong>Owner Score:</strong> {{ series.ownerScore?.name }}</p>
+  <p><strong>คะแนนเฉลี่ย:</strong> {{ series.avg_rating || 0 }} / 5</p>
+  <p><strong>จำนวนโหวต:</strong> {{ series.rating_count || 0 }}</p>
 
-  <div class="vote-section" *ngIf="username">
-    <h3>ให้คะแนน</h3>
+  <hr />
 
-    <select [(ngModel)]="score">
-      <option value="0">เลือกคะแนน</option>
-      <option *ngFor="let s of [1,2,3,4,5]" [value]="s">{{ s }} ⭐</option>
-    </select>
-
-    <button (click)="submitVote()" [disabled]="isSubmitting">
-      {{ isSubmitting ? 'กำลังส่ง...' : 'โหวต' }}
-    </button>
+  <!-- ปุ่มแก้ไข / ลบ -->
+  <div *ngIf="canEditOrDelete()" class="edit-actions">
+    <button (click)="updateSeries()">✏️ แก้ไข</button>
+    <button (click)="deleteSeries()">🗑️ ลบ</button>
   </div>
 
-  <div class="stats">
-    <p><strong>คะแนนเฉลี่ย 🌟:</strong> {{ series.avg_rating || 0 | number:'1.1-1' }}</p>
-    <p><strong>จำนวนโหวต:</strong> {{ series.rating_count || 0 }}</p>
-  </div>
+  <!-- ส่วนโหวต -->
+  <div *ngIf="!canEditOrDelete()">
+    <div *ngIf="!user">
+      ⚠️ กรุณาเข้าสู่ระบบเพื่อให้คะแนน
+    </div>
 
-  <div *ngIf="!username" class="login-warning">
-    ⚠️ กรุณาเข้าสู่ระบบเพื่อให้คะแนน
+    <div *ngIf="user && !hasVoted">
+      <label>ให้คะแนน (1–5):</label>
+      <select [(ngModel)]="score" name="score">
+        <option *ngFor="let n of [1, 2, 3, 4, 5]" [value]="n">{{ n }}</option>
+      </select>
+      <button (click)="submitVote()" [disabled]="isSubmitting">โหวต</button>
+    </div>
   </div>
-</section>
+</div>
+
+<ng-template #loading>
+  <p>Loading...</p>
+</ng-template>

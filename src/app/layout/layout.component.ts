@@ -30,7 +30,7 @@ export class LayoutComponent implements OnInit {
           role: payload.role || (payload.realm_access?.roles?.[0] || '')
         };
 
-        // ✅ เซฟผ่าน AuthService
+        // เซฟผ่าน AuthService
         this.authService.setLogin(userData, token);
 
         // clear query string ออกจาก URL

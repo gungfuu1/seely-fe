@@ -1,24 +1,38 @@
 <section>
   <h2>All Series</h2>
-  <div class="grid">
-    <div *ngFor="let item of series" class="card">
-        
-      <a [routerLink]="['/item-series', item.id]">
-        <img [src]="item.imageUrl" alt="{{ item.name }}">
-      </a>
-      <h3><a [routerLink]="['/item-series', item.id]">{{ item.name }}</a></h3>
-      <p><strong>Year:</strong> {{ item.year }}</p>
-      <p><strong>Description:</strong> {{ item.description }}</p>
 
-      <p><strong>Rating:</strong> {{ item.rating?.name }} </p>
-      <p><strong>Owner Score:</strong> {{ item.ownerScore?.name }}</p>
+  <!--  Search + Filter -->
+  <div class="filter-bar">
+    <input
+      type="text"
+      placeholder="🔍 ค้นหาชื่อหรือคำอธิบาย..."
+      [(ngModel)]="searchTerm"
+      (input)="applyFilters()"
+    />
 
-      <p><strong>Posted by:</strong> {{ item.user?.username }}</p>
-
-      <p><strong>Average Rating 🌟:</strong> {{ item.avg_rating }} / 5 <p>
-      <p><strong>Votes:</strong> {{ item.rating_count }}</p>
-    </div>
+    <select [(ngModel)]="sortOrder" (change)="applyFilters()">
+      <option value="">-- เรียงตามคะแนนเฉลี่ย --</option>
+      <option value="desc">⭐ มาก → น้อย</option>
+      <option value="asc">⭐ น้อย → มาก</option>
+    </select>
   </div>
+
+  <div class="grid">
+  <div *ngFor="let item of filteredSeries" class="card">
+    <a [routerLink]="['/item-series', item.id]">
+      <img [src]="item.imageUrl" alt="{{ item.name }}">
+    </a>
+    <h3><a [routerLink]="['/item-series', item.id]">{{ item.name }}</a></h3>
+    <p><strong>Year:</strong> {{ item.year }}</p>
+    <p><strong>Description:</strong> {{ item.description }}</p>
+    <p><strong>Rating:</strong> {{ item.rating?.name }}</p>
+    <p><strong>Owner Score:</strong> {{ item.ownerScore?.name }}</p>
+    <p><strong>Posted by:</strong> {{ item.user?.username }}</p>
+    <p><strong>Average Rating 🌟:</strong> {{ item.avg_rating }} / 5</p>
+    <p><strong>Votes:</strong> {{ item.rating_count }}</p>
+  </div>
+</div>
+
 
   <div class="pagination">
     <button (click)="prevPage()" [disabled]="currentPage === 1">Prev</button>

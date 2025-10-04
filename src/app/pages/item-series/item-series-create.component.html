@@ -1,0 +1,73 @@
+<section class="create-series-container">
+  <h2>🎬 สร้างซีรีส์ใหม่</h2>
+
+  <form (ngSubmit)="createSeries()" class="series-form">
+    <div class="form-group">
+      <label for="name">ชื่อเรื่อง</label>
+      <input
+        id="name"
+        type="text"
+        [(ngModel)]="series.name"
+        name="name"
+        placeholder="กรอกชื่อซีรีส์"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="year">ปีที่ผลิต</label>
+      <input
+        id="year"
+        type="number"
+        [(ngModel)]="series.year"
+        name="year"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="description">คำอธิบาย</label>
+      <textarea
+        id="description"
+        [(ngModel)]="series.description"
+        name="description"
+        placeholder="เขียนคำอธิบายสั้น ๆ เกี่ยวกับซีรีส์นี้..."
+        required
+      ></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="imageUrl">URL รูปภาพ</label>
+      <input
+        id="imageUrl"
+        type="url"
+        [(ngModel)]="series.imageUrl"
+        name="imageUrl"
+        placeholder="https://example.com/series.jpg"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="ratingId">ประเภทเรตติ้ง</label>
+      <select id="ratingId" [(ngModel)]="series.ratingId" name="ratingId">
+        <option *ngFor="let r of ratings" [value]="r.id">
+          {{ r.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="ownerScoreId">Owner Score</label>
+      <select id="ownerScoreId" [(ngModel)]="series.ownerScoreId" name="ownerScoreId">
+        <option *ngFor="let o of ownerScores" [value]="o.id">
+          {{ o.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit">💾 บันทึกซีรีส์</button>
+    </div>
+  </form>
+</section>
+

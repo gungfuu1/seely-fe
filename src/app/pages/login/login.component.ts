@@ -40,7 +40,7 @@ export class LoginComponent {
           return;
         }
 
-        // ✅ decode JWT payload
+        //  decode JWT payload
         let payload: any = {};
         try {
           payload = JSON.parse(atob(token.split('.')[1]));
@@ -53,7 +53,7 @@ export class LoginComponent {
 
         console.log('[Login] Full JWT Payload:', payload);
 
-        // ✅ เก็บ user + token ผ่าน AuthService
+        //  เก็บ user + token ผ่าน AuthService
         this.authService.setLogin(
           {
             username: payload.preferred_username || payload.username || '',

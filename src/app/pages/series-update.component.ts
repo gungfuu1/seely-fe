@@ -46,14 +46,14 @@ export class SeriesUpdateComponent {
 
   onSubmit() {
   if (this.id) {
-    const token = localStorage.getItem('accessToken'); // 👈 token จาก login
+    const token = localStorage.getItem('accessToken'); 
 
     this.http.patch(
       `http://localhost:3000/api/v1/item-series/${this.id}`,
       this.series,
       {
         headers: {
-          Authorization: `Bearer ${token}` // 👈 แนบไป
+          Authorization: `Bearer ${token}` 
         }
       }
     ).subscribe({
